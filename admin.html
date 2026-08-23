@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Electrize Monitor - Admin</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, system-ui, sans-serif;
+      background: #0f0f1a;
+      color: #f0f0f5;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .wrap { max-width: 700px; margin: 0 auto; }
+    .card {
+      background: #1a1a2e;
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    }
+    h1 { font-size: 20px; margin-bottom: 16px; }
+    input {
+      width: 100%;
+      padding: 14px;
+      border-radius: 10px;
+      border: 1px solid #333;
+      background: #0f0f1a;
+      color: #fff;
+      font-size: 15px;
+      margin-bottom: 12px;
+    }
+    button {
+      width: 100%;
+      padding: 14px;
+      border-radius: 10px;
+      border: none;
+      background: #e63946;
+      color: #fff;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    #erro { color: #ff6b6b; font-size: 13px; margin-top: 8px; text-align: center; }
+    #lista { display: none; }
+    .linha-cliente {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid #2a2a3e;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+    }
+    .linha-cliente:last-child { border-bottom: none; }
+    .linha-cliente:hover { background: #22223a; }
+    .nome-cliente { font-size: 14px; font-weight: 600; }
+    .status-mini { font-size: 12px; margin-top: 2px; }
+    .status-online-txt { color: #4ade80; }
+    .status-offline-txt { color: #ff6b6b; }
+    .status-warning-txt { color: #f59e0b; }
+    .resumo { display: flex; gap: 16px; margin-bottom: 16px; font-size: 13px; color: #9999aa; }
+    .busca { margin-bottom: 12px; }
+    .donut-wrap {
+      position: relative;
+      width: 180px;
+      height: 180px;
+      margin: 0 auto 20px;
+    }
+    .donut {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+    }
+    .donut-centro {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 66%;
+      height: 66%;
+      background: #1a1a2e;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .donut-centro-numero { font-size: 26px; font-weight: 700; }
+    .donut-centro-label { font-size: 11px; color: #9999aa; }
+    .legenda { display: flex; justify-content: center; gap: 16px; font-size: 12px; margin-bottom: 20px; }
+    .abas { display: flex; gap: 8px; margin-bottom: 16px; }
+    .aba-btn {
+      flex: 1;
+      padding: 10px 6px;
+      border-radius: 8px;
+      border: 1px solid #333;
+      background: #14141f;
+      color: #9999aa;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      text-align: center;
+    }
+    .aba-btn.ativa { border-color: currentColor; }
+    .aba-online.ativa { background: #2a9d3320; color: #4ade80; }
+    .aba-atencao.ativa { background: #fb923c20; color: #fb923c; }
+    .aba-offline.ativa { background: #ff6b6b20; color: #ff6b6b; }
+    .aba-erro.ativa { background: #f59e0b20; color: #f59e0b; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card" id="login-card">
+      <h1>🔒 Electrize Monitor - Admin</h1>
+      <input type="password" id="senha" placeholder="Senha de administrador" />
+      <button onclick="entrar()">Entrar</button>
+      <div id="erro"></div>
+    </div>
+
+    <div id="lista">
+      <div class="card">
+        <h1>Suas usinas</h1>
+        <div class="donut-wrap">
+          <div class="donut" id="donut"></div>
+          <div class="donut-centro">
+            <div class="donut-centro-numero" id="donut-total">-</div>
+            <div class="donut-centro-label">usinas</div>
+          </div>
+        </div>
+        <div class="legenda">
+          <span>🟢 Online</span>
+          <span>🟠 Atenção</span>
+          <span>🟡 Com erro</span>
+          <span>🔴 Offline</span>
+        </div>
+        <div class="abas">
+          <div class="aba-btn aba-online" id="aba-online" onclick="selecionarAba('online')">Online<br/><span id="cont-online">0</span></div>
+          <div class="aba-btn aba-atencao" id="aba-atencao" onclick="selecionarAba('atencao')">Atenção<br/><span id="cont-atencao">0</span></div>
+          <div class="aba-btn aba-erro" id="aba-erro" onclick="selecionarAba('erro')">Com erro<br/><span id="cont-erro">0</span></div>
+          <div class="aba-btn aba-offline" id="aba-offline" onclick="selecionarAba('offline')">Offline<br/><span id="cont-offline">0</span></div>
+        </div>
+        <input type="text" class="busca" id="busca" placeholder="Buscar por nome..." oninput="filtrarLista()" />
+        <div id="lista-clientes"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="admin.js"></script>
+</body>
+</html>

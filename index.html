@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Electrize Monitor</title>
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#1a1a2e" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, system-ui, sans-serif;
+      background: #0f0f1a;
+      color: #f0f0f5;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .wrap { max-width: 700px; margin: 0 auto; }
+    .card {
+      background: #1a1a2e;
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 16px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    }
+    h1 { font-size: 20px; margin-bottom: 12px; }
+    h2 { font-size: 15px; color: #9999aa; margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .status-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+    .status-online { background: #2a9d3320; color: #4ade80; }
+    .status-offline { background: #ff6b6b20; color: #ff6b6b; }
+    .status-warning { background: #f59e0b20; color: #f59e0b; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 16px; }
+    .metric-label { font-size: 12px; color: #9999aa; margin-bottom: 4px; }
+    .metric-value { font-size: 22px; font-weight: 700; }
+    .metric-unit { font-size: 12px; color: #9999aa; font-weight: 400; }
+    .inversor-box { background: #14141f; border-radius: 12px; padding: 16px; margin-bottom: 12px; }
+    .inversor-titulo { font-size: 14px; font-weight: 600; margin-bottom: 10px; color: #e63946; }
+    .campo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 10px; }
+    .campo { font-size: 12px; }
+    .campo-label { color: #777; }
+    .campo-valor { font-size: 14px; font-weight: 600; }
+    .lista-item { padding: 10px 0; border-bottom: 1px solid #2a2a3e; font-size: 13px; }
+    .lista-item:last-child { border-bottom: none; }
+    .erro-msg { color: #ff6b6b; text-align: center; padding: 20px 0; }
+    .centro { text-align: center; }
+    .sem-dados { color: #666; font-size: 13px; }
+    .atualizado { font-size: 11px; color: #666; margin-top: 6px; }
+  </style>
+</head>
+<body>
+  <div class="wrap" id="conteudo">
+    <div class="card centro">Carregando dados da usina...</div>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
